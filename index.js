@@ -18,15 +18,15 @@ const host = process.env.HOST;
 const app = express();
 
 app.get('/', async (req, res) => {
-    if (shops[req.query.shop] === undefined) {
-        res.redirect(`/auth/?shop=${req.query.shop}`);
+    // if (shops[req.query.shop] === undefined) {
+    //     res.redirect(`/auth/?shop=${req.query.shop}`);
 
-    }
-    else {
-        res.send("Hello World");
-        res.end();
-    }
-
+    // }
+    // else {
+    //     res.send("Hello World");
+    //     res.end();
+    // }
+   res.send("Hello World");
 });
 
 
