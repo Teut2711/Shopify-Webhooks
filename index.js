@@ -4,9 +4,9 @@ require('dotenv').config();
 
 
 Shopify.Context.initialize({
-    API_KEY: process.env.API_KEY,
-    API_SECRET_KEY: process.env.API_SECRET_KEY,
-    SCOPES: process.env.SCOPES,
+    API_KEY: process.env.SHOPIFY_API_KEY,
+    API_SECRET_KEY: process.env.SHOPIFY_API_SECRET_KEY,
+    SCOPES: process.env.SHOPIFY_API_SCOPES,
     HOST_NAME: process.env.HOST,
     IS_EMBEDDED_APP: true,
 });
