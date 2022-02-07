@@ -3,13 +3,6 @@ const { Shopify } = require('@shopify/shopify-api');
 require('dotenv').config();
 
 
-Shopify.Context.initialize({
-    API_KEY: process.env.SHOPIFY_API_KEY,
-    API_SECRET_KEY: process.env.SHOPIFY_API_SECRET_KEY,
-    SCOPES: process.env.SHOPIFY_API_SCOPES,
-    HOST_NAME: process.env.HOST,
-    IS_EMBEDDED_APP: true,
-});
 
 const shops = {};
 
@@ -30,13 +23,15 @@ app.get('/', async (req, res) => {
 
 app.get("/auth", async (req, res) => {
 
-    const authRoute = await Shopify.Auth.beginAuth(
-        req,
-        res,
-        req.query.shop,
-        "/auth/callback",
-        false);
+    // const authRoute = await Shopify.Auth.beginAuth(
+    //     req,
+    //     res,
+    //     req.query.shop,
+    //     "/auth/callback",
+    //     false);
 
+    const authRoute = `https://${req.query.shop}.myshopify.com/admin/oauth/authorize?client_id=${process.env.SHOPIFY_API_KEY}&scope=${process.env.SHOPIFY_API_SCOPES}&redirect_uri=${"/auth/callback"}&state=${"nonce"}&grant_options[]=${"per-user"}`;
+    console.log(authRoute);
     res.redirect(authRoute);
 
 })
