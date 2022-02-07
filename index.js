@@ -2,34 +2,55 @@ const express = require('express');
 const { Shopify } = require('@shopify/shopify-api');
 require('dotenv').config();
 
+
+Shopify.Context.initialize({
+    API_KEY: process.env.API_KEY,
+    API_SECRET_KEY: process.env.API_SECRET_KEY,
+    SCOPES: process.env.SCOPES,
+    HOST_NAME: process.env.HOST,
+    IS_EMBEDDED_APP: true,
+});
+
 const shops = {};
+
+const host = process.env.HOST;
 
 const app = express();
 
 app.get('/', async (req, res) => {
 
-
     if (shops[req.query.shop] === undefined) {
-        console.log(req.query.shop);
-        const auth_url = `https://${req.query.shop}.myshopify.com/admin/oauth/authorize?client_id=${process.env.API_KEY}&scope=${process.env.SCOPES}&redirect_uri=${"/auth/callback"}&state=${"myapp"}&grant_options[]=${"per-user"}`
-        res.redirect(auth_url);
-
+        res.redirect(`/auth/?shop=${req.query.shop}`);
     }
     else {
-        res.send("Hello World");
-        res.end();
+        res.status(201).send("Hello World");
     }
-
 });
 
 
+app.get("/auth", async (req, res) => {
+
+    const authRoute = await Shopify.Auth.beginAuth(
+        req,
+        res,
+        req.query.shop,
+        "/auth/callback",
+        false);
+
+    res.redirect(authRoute);
+
+})
 
 app.post("/auth/callback", async (req, res) => {
+    const shopSession = await Shopify.Auth.validateAuthCallback(
+        req,
+        res,
+        req.query,
+    )
     shops[shopSession.shop] = shopSession;
-    console.log("Hiiiiiiii" , shopSession.shop);
-    res.redirect(`http://${shopSession.shop}/admin`)
+    res.redirect(`http://${shopSession.shop}/admin/apps/begin101`)
 })
-const host = process.env.HOST;
+
 const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`Server running at http://${host}:${port}`)
