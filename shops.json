@@ -1,1 +1,10 @@
-{"clothify27.myshopify.com":{"id":"offline_clothify27.myshopify.com","shop":"clothify27.myshopify.com","state":"796062044402825","isOnline":false,"accessToken":"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","scope":"read_checkouts,write_inventory,write_products,write_orders"}}
+{
+    "clothify27.myshopify.com": {
+        "id": "offline_clothify27.myshopify.com",
+        "shop": "clothify27.myshopify.com",
+        "state": "796062044402825",
+        "isOnline": false,
+        "accessToken": "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",
+        "scope": "read_checkouts,write_inventory,write_products,write_orders"
+    }
+}
