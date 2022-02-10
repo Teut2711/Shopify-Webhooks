@@ -35,30 +35,27 @@ Shopify.Context.initialize({
 //const shops = JSON.parse(fs.readFileSync("shops.json", { encoding: "utf8" }));
 
 app.get('/', async (req, res) => {
+    try {
+        let shopData = await ShopOAuth.findById(req.query.shop);
 
-    let shopData = ShopOAuth.findOne({ _id: req.query.shop });
-
-    if (shopData === undefined) {
-        res.redirect(`/auth/?shop=${req.query.shop}`);
-    }
-    else {
-        try {
+        if (shopData) {
             res.send("Hello world");
-        } catch (e) {
-            console.log(e)
+        } else {
+            throw new Error("Shop not found");
         }
-
+    } catch (e) {
+        res.redirect(`/auth/?shop=${req.query.shop}`);
     }
 });
 
 
 app.post('/orders/create', async (req, res) => {
-    res.send(req);
-
+    res.send(req.body);
 
 })
 
 app.listen(process.env.PORT, () => {
     console.log(`Server running at https://${process.env.HOST}`)
 });
+
 

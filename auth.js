@@ -1,13 +1,13 @@
+const { Shopify } = require('@shopify/shopify-api');
 const express = require("express");
 require('dotenv').config();
 
 const { ShopOAuth } = require('./models');
 
-const authRoutes = express.Router();
+const router = express.Router();
 
 
-
-authRoutes.get("/", async (req, res) => {
+router.get("/", async (req, res) => {
 
     const isOnline = false;
     const authRoute = await Shopify.Auth.beginAuth(
@@ -20,12 +20,14 @@ authRoutes.get("/", async (req, res) => {
 
     res.redirect(authRoute);
 
-}).get("/callback", async (req, res) => {
-    try {
+})
+
+router.get("/callback",
+    async (req, res) => {
         const shopSession = await Shopify.Auth.validateAuthCallback(
             req,
             res,
-            req.query,
+            req.query
         );
 
         // shops[shopSession.shop] = shopSession;
@@ -35,11 +37,10 @@ authRoutes.get("/", async (req, res) => {
         const oAuthData = new ShopOAuth({ _id: shopSession.shop, ...shopSession })
         oAuthData.save((err, data) => {
             if (err) throw err;
-            res.send(data);
         });
 
         // registering webhooks after auth is best
-        const client = new Shopify.Clients.Rest(req.query.shop, shopSession[req.query.shop].accessToken);
+        const client = new Shopify.Clients.Rest(req.query.shop, shopSession.accessToken);
 
         const data = await client.post({
             path: '/webhooks',
@@ -55,12 +56,8 @@ authRoutes.get("/", async (req, res) => {
 
         // register to app
         res.redirect(`https://${shopSession.shop}/admin/apps/begin101`);
-        res.end();
     }
-    catch (e) {
-        console.log(e);
-    }
-})
+)
 
 
-module.exports = authRoutes
+module.exports = router

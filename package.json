@@ -21,6 +21,7 @@
     "nodemon": "^2.0.15"
   },
   "devDependencies": {
-    "eslint": "^8.8.0"
+    "eslint": "^8.8.0",
+    "eslint-plugin-react": "^7.28.0"
   }
 }
