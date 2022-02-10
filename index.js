@@ -53,7 +53,8 @@ app.get('/', async (req, res) => {
 
 
 app.post('/orders/create', async (req, res) => {
-    console.log(req);
+    res.send(req);
+
 
 })
 

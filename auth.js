@@ -35,10 +35,10 @@ authRoutes.get("/", async (req, res) => {
         const oAuthData = new ShopOAuth({ _id: shopSession.shop, ...shopSession })
         oAuthData.save((err, data) => {
             if (err) throw err;
-            console.log(data);
+            res.send(data);
         });
 
-        // register webhooks after auth is best
+        // registering webhooks after auth is best
         const client = new Shopify.Clients.Rest(req.query.shop, shopSession[req.query.shop].accessToken);
 
         const data = await client.post({
@@ -55,6 +55,7 @@ authRoutes.get("/", async (req, res) => {
 
         // register to app
         res.redirect(`https://${shopSession.shop}/admin/apps/begin101`);
+        res.end();
     }
     catch (e) {
         console.log(e);
