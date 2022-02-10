@@ -2,7 +2,7 @@ const { Shopify } = require('@shopify/shopify-api');
 const express = require("express");
 require('dotenv').config();
 
-const { ShopOAuth } = require('./models');
+const { OAuth } = require('../models/oAuth');
 
 const router = express.Router();
 
@@ -22,6 +22,9 @@ router.get("/", async (req, res) => {
 
 })
 
+
+
+
 router.get("/callback",
     async (req, res) => {
         const shopSession = await Shopify.Auth.validateAuthCallback(
@@ -29,12 +32,17 @@ router.get("/callback",
             res,
             req.query
         );
+        
 
+        // Alternate implementions
+        
         // shops[shopSession.shop] = shopSession;
 
+        //or
         // fs.writeFileSync("shops.json", JSON.stringify(shops));
-
-        const oAuthData = new ShopOAuth({ _id: shopSession.shop, ...shopSession })
+        //or (current)
+        console.log(shopSession,"shopSession")
+        const oAuthData = new OAuth({ _id: shopSession.shop, ...shopSession })
         oAuthData.save((err, data) => {
             if (err) throw err;
         });

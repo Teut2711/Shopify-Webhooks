@@ -1,11 +1,6 @@
 const mongoose = require('mongoose');
 
 
-
-
-
-
-
 const schema = new mongoose.Schema({
     _id: String,
     id: {
@@ -25,6 +20,6 @@ const schema = new mongoose.Schema({
     scope: String
 }
 );
-const ShopOAuth = mongoose.model("ShopOAuth", schema);
+const OAuth = mongoose.model("OAuth", schema);
 
-module.exports = { ShopOAuth };
+module.exports = { OAuth };

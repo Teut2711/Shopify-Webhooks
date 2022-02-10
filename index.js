@@ -1,13 +1,17 @@
 const { Shopify } = require('@shopify/shopify-api');
 const express = require('express');
 const mongoose = require('mongoose');
+
+const { OAuth } = require('./models/oAuth');
+const { Order } = require('./models/order');
+
 const axios = require('axios').default;
+
 const jsonParser = require("body-parser").json()
 require('dotenv').config();
 
 
-const authRoutes = require('./auth');
-const { ShopOAuth } = require('./models');
+const authRoutes = require('./controllers/auth');
 
 
 
@@ -37,7 +41,8 @@ Shopify.Context.initialize({
 
 app.get('/', async (req, res) => {
     try {
-        let shopData = await ShopOAuth.findById(req.query.shop);
+        let shopData = await OAuth.findById(req.query.shop);
+        console.log("Shopdata", shopData)
 
         if (shopData) {
             res.send("Hello world");
@@ -51,8 +56,16 @@ app.get('/', async (req, res) => {
 
 
 app.post('/orders/create', async (req, res) => {
+
+    console.log("I m orderssssss")
     axios.post(`https://shopify.free.beeceptor.com`, req.body)
-    res.end();
+
+    const anOrder = new Order({ _id: req.body.id, webhookType: "ORDERS_CREATE", ...req.body });
+    anOrder.save((err, data) => {
+        if (err) throw err;
+    });
+    res.send(req.body);
+
 })
 
 app.listen(process.env.PORT, () => {
