@@ -1,6 +1,7 @@
 const { Shopify } = require('@shopify/shopify-api');
 const express = require('express');
 const mongoose = require('mongoose');
+const axios = require('axios').default;
 const jsonParser = require("body-parser").json()
 require('dotenv').config();
 
@@ -50,8 +51,8 @@ app.get('/', async (req, res) => {
 
 
 app.post('/orders/create', async (req, res) => {
-    res.send(req.body);
-
+    axios.post(`https://shopify.free.beeceptor.com`, req.body)
+    res.end();
 })
 
 app.listen(process.env.PORT, () => {
