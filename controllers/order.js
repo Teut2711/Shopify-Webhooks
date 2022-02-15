@@ -17,7 +17,7 @@ router.post('/create', async (req, res) => {
     anOrder.save((err, data) => {
         if (err) throw err;
     });
-    res.send(req.body);
+    res.status(200).end();
 
 })
 
